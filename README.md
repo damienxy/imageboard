@@ -1,9 +1,7 @@
-# Imageboard
+# Imageboard built with Vue.js
 
-Imageboard built with Vue.js.
-
-Features:
+**Features:**
 Display of all uploaded images | Image upload | Image modals with comment function
 
-Technologies:
+**Technologies:**
 Javascript ES6 | Vue.js | Node.js | Express.js | PostgreSQL | HTML/CSS
