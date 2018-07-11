@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+<head>
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/stylesheet.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <div id="main">
+        <image-modal
+            v-if="currentImageId"
+            v-bind:id="currentImageId"
+            v-on:close="closeModal">
+        </image-modal>
+
+        <form class="form">
+            <div class="uploadHeading" v-on:click="toggleUpload">
+                <div id="x"></div>
+                <div id="y"></div>
+            </div>
+            <div class="flex upload">
+                <div class="flex uploadOption" v-bind:class="{ active: isActive }">
+                    <div class="firstrow">
+                        <input class="inputText" v-model="imgFormInfo.title" type="text" placeholder="Add title">
+                        <input class="inputText" v-model="imgFormInfo.description" type="text" placeholder="Add description">
+                        <input class="inputText" v-model="imgFormInfo.username" type="text" placeholder="Add username">
+                    </div>
+                    <div class="secondrow">
+                        <input id="file" class="inputFile" ref="fileInput" v-on:change="selectFile" type="file">
+                        <label class="label" for="file"> <i class="fa fa-upload"></i> {{chooseImage}}</label>
+                        <button class="button small upl" type="button" v-on:click="uploadImage">UPLOAD</button>
+                        <div class="error" v-bind:class="{ errorInactive: !isActive }">{{ error }}</div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div id="mainContainer" v-if="images.length > 0">
+            <div class="item" v-for="image in images">
+                <p class="title">{{ image.title }}</p>
+                <a v-bind:href="'#' + image.id"><img class="imageMain" v-bind:src="image.url"></a>
+
+            </div>
+        </div>
+
+        <div class="flex">
+            <div v-bind:class="{ active: moreButton }"class="more" v-on:click="moreImages">
+                <div id="x"></div>
+                <div id="y"></div>
+            </div>
+        </div>
+    </div>
+
+    <script id="image-modal-template" type="text/x-template">
+        <div id="modalContainer">
+            <div>
+                <a v-if="currentImage.next_id != null" v-bind:href="'#' + currentImage.next_id" class="left arrow"></a>
+            </div>
+            <div>
+                <div class="form flex commenting">
+                    <div class="errorComment">{{ errorComment }}</div>
+                    <div class="text">Add your comment</div>
+                    <input class="inputTextComment" v-model="commentForm.commenter" type="text" placeholder="Your username"></input>
+                    <input class="inputTextComment commentBox" v-model="commentForm.comment" type="text" placeholder="Add your comment"></input>
+                    <button class="button small submit" type="button" v-on:click="submitComment">SUBMIT</button>
+                    <div>
+                        <div v-if="comments.length > 0">
+                            <div class="text commentTitle">Comments</div>
+                            <div id="comments" v-for="comment in comments">
+                                <div class="comment">{{ comment.comment }}</div>
+                                <div class="commenter">commented by {{ comment.commenter }} on {{ (new Date(comment.created_at)).toDateString() }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="close" v-on:click="closeMe">
+                    <div id="a"></div>
+                    <div id="b"></div>
+                </div>
+                <img class="imgModal" v-bind:src="currentImage.url"></img>
+                <div class="infoModal">
+                    <div class=" titleModal">{{currentImage.title}}</div>
+                    <div class="text">{{currentImage.description}}</div>
+                    <div class="username">Uploaded by {{currentImage.username}} on {{ (new Date(currentImage.created_at)).toDateString() }}</div>
+                </div>
+            </div>
+            <div>
+                <a v-if="currentImage.prev_id != null" v-bind:href="'#' + currentImage.prev_id" class="right arrow"></a>
+            </div>
+        </div>
+    </script>
+
+    <script src="/js/vue.js"></script>
+    <script src="/js/axios.min.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+</html>
